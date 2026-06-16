@@ -1,0 +1,123 @@
+<script setup lang="ts">
+const { user, logout } = useAuth()
+
+const links = [
+  {
+    label: 'Dashboard',
+    icon: 'i-lucide-layout-dashboard',
+    to: '/admin'
+  },
+  {
+    label: 'Kode Registrasi',
+    icon: 'i-lucide-key',
+    to: '/admin/registration-codes'
+  },
+  {
+    label: 'Manajemen Pengguna',
+    icon: 'i-lucide-users',
+    to: '/admin/users'
+  }
+]
+
+const handleLogout = async () => {
+  await logout()
+}
+</script>
+
+<template>
+  <div class="flex h-screen bg-gray-50 dark:bg-neutral-950 overflow-hidden text-sm">
+    <!-- Sidebar -->
+    <aside class="w-64 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col shrink-0">
+      <!-- Sidebar Header -->
+      <div class="h-16 flex items-center px-6 border-b border-gray-100 dark:border-neutral-800 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="size-7 bg-primary rounded flex items-center justify-center">
+            <UIcon name="i-lucide-wallet" class="size-4 text-white" />
+          </div>
+          <h1 class="font-bold text-gray-900 dark:text-white truncate">
+            Keuangan RT
+          </h1>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+        <UNavigationMenu
+          orientation="vertical"
+          variant="pill"
+          :items="links"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="p-4 border-t border-gray-100 dark:border-neutral-800">
+        <div class="mb-4 px-2">
+          <p class="text-[10px] font-semibold text-gray-400 dark:text-neutral-500 uppercase tracking-wider mb-2">
+            Logged in as
+          </p>
+          <div class="flex items-center gap-2">
+            <UAvatar :alt="user?.name" size="2xs" />
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-gray-900 dark:text-white truncate">
+                {{ user?.name }}
+              </p>
+              <p class="text-xs text-gray-500 dark:text-neutral-400 truncate uppercase">
+                {{ user?.role }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <UButton
+          color="neutral"
+          variant="ghost"
+          icon="i-lucide-log-out"
+          class="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
+          @click="handleLogout"
+        >
+          Logout
+        </UButton>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- Content Header -->
+      <header class="h-16 border-b border-gray-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md flex items-center px-8 justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <h2 class="font-semibold text-gray-900 dark:text-white">
+            Admin Panel
+          </h2>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Additional Header Actions can go here -->
+          <UColorModeButton />
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div class="max-w-6xl mx-auto">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+</style>

@@ -14,12 +14,15 @@ useSeoMeta({
 const { form, loading, fieldErrors, errorMessage, handleSubmit } = useForm<LoginForm>(
   { email: '', password: '' }
 )
-const { login } = useAuth()
+const { login, user } = useAuth()
 const onSubmit = handleSubmit(async () => {
   const message = await login(form)
-  setTimeout(async () => {
+  
+  if (user.value?.role === 'ADMIN') {
+    await navigateTo('/admin')
+  } else {
     await navigateTo('/')
-  }, 1000)
+  }
 
   return message
 })

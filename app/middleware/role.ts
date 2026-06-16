@@ -16,6 +16,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!allowedRoles || allowedRoles.length === 0) return
 
   if (!hasRole(...allowedRoles)) {
-    return navigateTo('/403')
+    return navigateTo('/')
   }
 })

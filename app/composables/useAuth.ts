@@ -43,7 +43,9 @@ export const useAuth = () => {
   }
 
   const hasRole = (...roles: string[]) => {
-    return !!user.value && roles.includes(user.value.role)
+    if (!user.value?.role) return false
+    const userRole = user.value.role.toUpperCase()
+    return roles.some(role => role.toUpperCase() === userRole)
   }
 
   return { user, token, register, login, logout, fetchMe, hasRole }
