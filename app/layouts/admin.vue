@@ -12,6 +12,11 @@ const links = [
     to: '/admin'
   },
   {
+    label: 'Buku Kerja',
+    icon: 'i-lucide-book-open',
+    to: '/admin/accounts'
+  },
+  {
     label: 'Kode Registrasi',
     icon: 'i-lucide-key',
     to: '/admin/registration-codes'
