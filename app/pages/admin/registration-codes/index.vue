@@ -10,10 +10,10 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Kode Registrasi - GF2 Berkesan',
+  title: 'Kode Registrasi - GF2 Berkesan'
 })
 
-const { data: response, refresh, pending } = await useCustomFetch<RegistrationCode[]>('/registration-codes')
+const { data: response, refresh, pending } = useCustomFetch<RegistrationCode[]>('/registration-codes')
 
 const isModalOpen = ref(false)
 const isConfirmOpen = ref(false)
@@ -85,7 +85,25 @@ const formatDate = (dateStr: string) => {
     </div>
 
     <UCard :ui="{ body: 'p-0' }">
+      <div
+        v-if="pending && !response?.data"
+        class="divide-y divide-gray-200 dark:divide-neutral-800"
+      >
+        <div
+          v-for="i in 5"
+          :key="i"
+          class="p-4 flex gap-4"
+        >
+          <USkeleton class="h-4 w-[20%]" />
+          <USkeleton class="h-4 w-[20%]" />
+          <USkeleton class="h-4 w-[20%]" />
+          <USkeleton class="h-4 w-[30%]" />
+          <USkeleton class="h-4 w-[10%]" />
+        </div>
+      </div>
+
       <UTable
+        v-else
         :data="response?.data || []"
         :columns="columns"
         :loading="pending"

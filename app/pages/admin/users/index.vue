@@ -7,7 +7,7 @@ definePageMeta({
   roles: ['ADMIN']
 })
 
-const { data: response, refresh, pending } = await useCustomFetch<UserResponse[]>('/users')
+const { data: response, refresh, pending } = useCustomFetch<UserResponse[]>('/users')
 
 const q = ref('')
 
@@ -74,7 +74,17 @@ const formatDate = (dateStr: string) => {
         </div>
       </template>
 
+      <div v-if="pending && !response?.data" class="divide-y divide-gray-200 dark:divide-neutral-800">
+        <div v-for="i in 5" :key="i" class="p-4 flex gap-4">
+          <USkeleton class="h-4 w-[25%]" />
+          <USkeleton class="h-4 w-[35%]" />
+          <USkeleton class="h-4 w-[15%]" />
+          <USkeleton class="h-4 w-[25%]" />
+        </div>
+      </div>
+
       <UTable
+        v-else
         :data="filteredRows"
         :columns="columns"
         :loading="pending"
