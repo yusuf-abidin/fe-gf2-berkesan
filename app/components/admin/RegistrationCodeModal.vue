@@ -9,7 +9,7 @@ const emit = defineEmits(['update:modelValue', 'refresh'])
 
 const isOpen = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
+  set: value => emit('update:modelValue', value)
 })
 
 const { request } = useApi()
@@ -29,6 +29,15 @@ watch(() => props.modelValue, (newVal) => {
     isUnlimited.value = true
   }
 })
+
+const filterKeyboard = (event: KeyboardEvent) => {
+  const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter']
+  if (allowedKeys.includes(event.key)) return
+  const regex = /[A-Za-z0-9\-_]/
+  if (!regex.test(event.key)) {
+    event.preventDefault()
+  }
+}
 
 const generateRandomCode = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -89,6 +98,8 @@ const onSubmit = handleSubmit(async () => {
               placeholder="Contoh: WARGA-2024"
               class="flex-1"
               :disabled="loading"
+              @keydown="filterKeyboard"
+              @input="form.code = form.code.toUpperCase()"
             />
             <UButton
               icon="i-lucide-refresh-cw"
