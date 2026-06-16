@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import AppConfirmModal from '~/components/AppConfirmModal.vue'
+
 const { user, logout } = useAuth()
+const isLogoutConfirmOpen = ref(false)
+const isLoggingOut = ref(false)
 
 const links = [
   {
@@ -20,7 +24,13 @@ const links = [
 ]
 
 const handleLogout = async () => {
-  await logout()
+  isLoggingOut.value = true
+  try {
+    await logout()
+  } finally {
+    isLoggingOut.value = false
+    isLogoutConfirmOpen.value = false
+  }
 }
 </script>
 
@@ -73,7 +83,7 @@ const handleLogout = async () => {
           variant="ghost"
           icon="i-lucide-log-out"
           class="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
-          @click="handleLogout"
+          @click="isLogoutConfirmOpen = true"
         >
           Logout
         </UButton>
@@ -103,6 +113,15 @@ const handleLogout = async () => {
         </div>
       </main>
     </div>
+
+    <AppConfirmModal
+      v-model="isLogoutConfirmOpen"
+      title="Konfirmasi Logout"
+      description="Apakah Anda yakin ingin keluar dari aplikasi?"
+      confirm-label="Logout"
+      :loading="isLoggingOut"
+      @confirm="handleLogout"
+    />
   </div>
 </template>
 
