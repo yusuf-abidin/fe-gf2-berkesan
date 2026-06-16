@@ -9,6 +9,10 @@ definePageMeta({
   roles: ['ADMIN']
 })
 
+useSeoMeta({
+  title: 'Kode Registrasi - GF2 Berkesan',
+})
+
 const { data: response, refresh, pending } = await useCustomFetch<RegistrationCode[]>('/registration-codes')
 
 const isModalOpen = ref(false)
