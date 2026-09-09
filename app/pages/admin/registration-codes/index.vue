@@ -50,7 +50,7 @@ const deleteCode = async () => {
     toast.add({ title: 'Berhasil', description: res.message, color: 'success' })
     isConfirmOpen.value = false
     await refresh()
-  } catch (err) {
+  } catch {
     // Error handled by useApi/toast
   } finally {
     isDeleting.value = false

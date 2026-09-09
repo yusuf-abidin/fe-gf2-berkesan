@@ -12,7 +12,7 @@ const emit = defineEmits(['update:modelValue', 'refresh'])
 
 const isOpen = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
+  set: value => emit('update:modelValue', value)
 })
 
 const isEdit = computed(() => !!props.initialData)
@@ -20,25 +20,17 @@ const isEdit = computed(() => !!props.initialData)
 const { request } = useApi()
 const { form, loading, fieldErrors, handleSubmit } = useForm<CategoryForm>({
   account_id: props.accountId,
-  name: '',
-  type: 'IN'
+  name: ''
 })
-
-const typeOptions = [
-  { label: 'Pemasukan (IN)', value: 'IN' },
-  { label: 'Pengeluaran (OUT)', value: 'OUT' }
-]
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     if (props.initialData) {
       form.account_id = props.initialData.account_id
       form.name = props.initialData.name
-      form.type = props.initialData.type
     } else {
       form.account_id = props.accountId
       form.name = ''
-      form.type = 'IN'
     }
   }
 })
@@ -85,21 +77,6 @@ const onSubmit = handleSubmit(async () => {
           <UInput
             v-model="form.name"
             placeholder="Contoh: Iuran Warga"
-            class="w-full"
-            :disabled="loading"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Tipe Kategori"
-          name="type"
-          :error="fieldErrors.type?.[0]"
-          required
-        >
-          <USelect
-            v-model="form.type"
-            :items="typeOptions"
-            value-key="value"
             class="w-full"
             :disabled="loading"
           />

@@ -5,6 +5,14 @@ const { user, logout } = useAuth()
 const isLogoutConfirmOpen = ref(false)
 const isLoggingOut = ref(false)
 
+const route = useRoute()
+const isSidebarOpen = ref(false)
+
+// Auto-close sidebar on mobile when navigating
+watch(() => route.path, () => {
+  isSidebarOpen.value = false
+})
+
 const links = [
   {
     label: 'Dashboard',
@@ -17,6 +25,16 @@ const links = [
     to: '/admin/accounts'
   },
   {
+    label: 'Iuran Warga',
+    icon: 'i-lucide-hand-coins',
+    to: '/admin/contributions'
+  },
+  {
+    label: 'Data Warga',
+    icon: 'i-lucide-id-card',
+    to: '/admin/residents'
+  },
+  {
     label: 'Kode Registrasi',
     icon: 'i-lucide-key',
     to: '/admin/registration-codes'
@@ -25,6 +43,11 @@ const links = [
     label: 'Manajemen Pengguna',
     icon: 'i-lucide-users',
     to: '/admin/users'
+  },
+  {
+    label: 'Pengaturan',
+    icon: 'i-lucide-settings',
+    to: '/admin/settings'
   }
 ]
 
@@ -40,19 +63,37 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-50 dark:bg-neutral-950 overflow-hidden text-sm">
+  <div class="flex h-screen bg-gray-50 dark:bg-neutral-950 overflow-hidden text-sm relative">
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div
+      v-if="isSidebarOpen"
+      class="fixed inset-0 z-40 bg-black/50 md:hidden"
+      @click="isSidebarOpen = false"
+    />
+
     <!-- Sidebar -->
-    <aside class="w-64 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col shrink-0">
+    <aside
+      :class="[
+        'fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col shrink-0 transition-transform duration-300 md:static md:translate-x-0',
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
       <!-- Sidebar Header -->
-      <div class="h-16 flex items-center px-6 border-b border-gray-100 dark:border-neutral-800 shrink-0">
-        <div class="flex items-center gap-2">
-          <div class="size-7 bg-primary rounded flex items-center justify-center">
-            <UIcon name="i-lucide-wallet" class="size-4 text-white" />
-          </div>
-          <h1 class="font-bold text-gray-900 dark:text-white truncate">
-            Keuangan RT
-          </h1>
-        </div>
+      <div class="h-16 flex items-center justify-between px-6 border-b border-gray-100 dark:border-neutral-800 shrink-0">
+        <NuxtLink
+          to="/admin"
+          class="inline-block"
+        >
+          <AppLogo class="h-8 w-auto text-gray-900 dark:text-white" />
+        </NuxtLink>
+        <UButton
+          icon="i-lucide-x"
+          color="neutral"
+          variant="ghost"
+          size="sm"
+          class="md:hidden"
+          @click="isSidebarOpen = false"
+        />
       </div>
 
       <!-- Navigation -->
@@ -72,7 +113,10 @@ const handleLogout = async () => {
             Logged in as
           </p>
           <div class="flex items-center gap-2">
-            <UAvatar :alt="user?.name" size="2xs" />
+            <UAvatar
+              :alt="user?.name"
+              size="2xs"
+            />
             <div class="flex-1 min-w-0">
               <p class="font-medium text-gray-900 dark:text-white truncate">
                 {{ user?.name }}
@@ -98,8 +142,16 @@ const handleLogout = async () => {
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
       <!-- Content Header -->
-      <header class="h-16 border-b border-gray-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md flex items-center px-8 justify-between shrink-0">
+      <header class="h-16 border-b border-gray-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md flex items-center px-6 justify-between shrink-0">
         <div class="flex items-center gap-2">
+          <!-- Mobile Sidebar Toggle -->
+          <UButton
+            icon="i-lucide-menu"
+            color="neutral"
+            variant="ghost"
+            class="md:hidden"
+            @click="isSidebarOpen = true"
+          />
           <h2 class="font-semibold text-gray-900 dark:text-white">
             Admin Panel
           </h2>
@@ -112,7 +164,7 @@ const handleLogout = async () => {
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+      <main class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
         <div class="max-w-6xl mx-auto">
           <slot />
         </div>

@@ -27,7 +27,7 @@ const onSubmit = handleSubmit(async () => {
     email: form.email,
     password: form.password
   })
-  
+
   setTimeout(async () => {
     await navigateTo('/')
   }, 1000)

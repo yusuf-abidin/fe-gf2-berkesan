@@ -20,6 +20,7 @@ export function useForm<T extends Record<string, unknown>>(
     errorMessage.value = ''
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const handleSubmit = (fn: () => Promise<string | void>) => {
     return async () => {
       clearErrors()

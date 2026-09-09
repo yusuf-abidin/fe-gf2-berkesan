@@ -8,8 +8,7 @@ export const registrationCodeSchema = z.object({
     .max(255, 'Kode terlalu panjang'),
   expires_at: z
     .number({
-      required_error: 'Waktu kedaluwarsa harus dipilih',
-      invalid_type_error: 'Pilih masa aktif'
+      message: 'Waktu kedaluwarsa harus dipilih'
     })
     .int(),
   usage_limit: z

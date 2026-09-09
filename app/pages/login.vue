@@ -17,11 +17,11 @@ const { form, loading, fieldErrors, errorMessage, handleSubmit } = useForm<Login
 const { login, user } = useAuth()
 const onSubmit = handleSubmit(async () => {
   const message = await login(form)
-  
+
   if (user.value?.role === 'ADMIN') {
     await navigateTo('/admin')
   } else {
-    await navigateTo('/')
+    await navigateTo('/user/accounts')
   }
 
   return message
@@ -77,33 +77,44 @@ const showPassword = ref(false)
       </UFormField>
 
       <!-- Password -->
-      <UFormField
-        label="Password"
-        name="password"
-        :error="fieldErrors.password?.[0]"
-      >
-        <UInput
-          v-model="form.password"
-          :type="showPassword ? 'text' : 'password'"
-          placeholder="Masukkan password"
-          autocomplete="current-password"
-          size="lg"
+      <div class="w-full">
+        <div class="flex items-center justify-between text-sm font-medium mb-1.5">
+          <span>Password</span>
+          <NuxtLink
+            to="/forgot-password"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
+          >
+            Lupa password?
+          </NuxtLink>
+        </div>
+        <UFormField
+          name="password"
+          :error="fieldErrors.password?.[0]"
           class="w-full"
-          :disabled="loading"
-          :ui="{ trailing: 'pe-1' }"
         >
-          <template #trailing>
-            <UButton
-              :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-              color="neutral"
-              variant="ghost"
-              size="sm"
-              :aria-label="showPassword ? 'Sembunyikan password' : 'Tampilkan password'"
-              @click="showPassword = !showPassword"
-            />
-          </template>
-        </UInput>
-      </UFormField>
+          <UInput
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Masukkan password"
+            autocomplete="current-password"
+            size="lg"
+            class="w-full"
+            :disabled="loading"
+            :ui="{ trailing: 'pe-1' }"
+          >
+            <template #trailing>
+              <UButton
+                :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                color="neutral"
+                variant="ghost"
+                size="sm"
+                :aria-label="showPassword ? 'Sembunyikan password' : 'Tampilkan password'"
+                @click="showPassword = !showPassword"
+              />
+            </template>
+          </UInput>
+        </UFormField>
+      </div>
 
       <UButton
         type="submit"

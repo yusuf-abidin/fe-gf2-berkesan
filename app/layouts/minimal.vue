@@ -6,7 +6,7 @@
           to="/"
           class="inline-block"
         >
-          <AppLogo class="h-8 w-auto mx-auto" />
+          <AppLogo class="h-12 w-auto mx-auto" />
         </NuxtLink>
       </div>
       <slot />

@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { accountSchema, type AccountForm } from '~/utils/validator/account.schema'
+import type { Account } from '~/types/account'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: boolean
-}>()
+  account?: Account | null
+}>(), {
+  account: null
+})
 
 const emit = defineEmits(['update:modelValue', 'refresh'])
 
@@ -11,6 +15,8 @@ const isOpen = computed({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value)
 })
+
+const isEdit = computed(() => !!props.account)
 
 const { request } = useApi()
 const { form, loading, fieldErrors, handleSubmit } = useForm<AccountForm>({
@@ -21,9 +27,9 @@ const { form, loading, fieldErrors, handleSubmit } = useForm<AccountForm>({
 
 const isSlugModified = ref(false)
 
-// Auto-generate slug from name
+// Auto-generate slug from name (only if not editing or modified)
 watch(() => form.name, (newVal) => {
-  if (!isSlugModified.value) {
+  if (!isSlugModified.value && !isEdit.value) {
     form.slug = newVal
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
@@ -45,10 +51,17 @@ watch(() => form.slug, (newVal) => {
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
-    form.name = ''
-    form.slug = ''
-    form.description = ''
-    isSlugModified.value = false
+    if (props.account) {
+      form.name = props.account.name
+      form.slug = props.account.slug
+      form.description = props.account.description || ''
+      isSlugModified.value = true
+    } else {
+      form.name = ''
+      form.slug = ''
+      form.description = ''
+      isSlugModified.value = false
+    }
   }
 })
 
@@ -57,8 +70,11 @@ const onSlugInput = () => {
 }
 
 const onSubmit = handleSubmit(async () => {
-  const response = await request('/accounts', {
-    method: 'POST',
+  const url = isEdit.value ? `/accounts/${props.account!.id}` : '/accounts'
+  const method = isEdit.value ? 'PATCH' : 'POST'
+
+  const response = await request(url, {
+    method,
     body: form
   })
 
@@ -71,8 +87,8 @@ const onSubmit = handleSubmit(async () => {
 <template>
   <UModal
     v-model:open="isOpen"
-    title="Tambah Buku Kerja"
-    description="Buat buku kerja baru untuk mengelola kategori dan transaksi."
+    :title="isEdit ? 'Ubah Buku Kerja' : 'Tambah Buku Kerja'"
+    :description="isEdit ? 'Perbarui detail informasi buku kerja.' : 'Buat buku kerja baru untuk mengelola kategori dan transaksi.'"
   >
     <template #body>
       <UForm
@@ -134,7 +150,7 @@ const onSubmit = handleSubmit(async () => {
           />
           <UButton
             type="submit"
-            label="Simpan Buku"
+            :label="isEdit ? 'Simpan Perubahan' : 'Simpan Buku'"
             :loading="loading"
           />
         </div>

@@ -21,6 +21,14 @@ export default defineNuxtConfig({
     '/': { prerender: true }
   },
 
+  vite: {
+    server: {
+      allowedHosts: [
+        'gf2-berkesan.personalvps.my.id'
+      ]
+    }
+  },
+
   compatibilityDate: '2025-01-15',
 
   eslint: {
@@ -30,5 +38,5 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
-  },
+  }
 })
