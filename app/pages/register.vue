@@ -120,12 +120,14 @@ const showConfirmPassword = ref(false)
         >
           <template #trailing>
             <UButton
+              type="button"
               :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
               color="neutral"
               variant="ghost"
               size="sm"
+              class="pointer-events-auto cursor-pointer"
               :aria-label="showPassword ? 'Sembunyikan password' : 'Tampilkan password'"
-              @click="showPassword = !showPassword"
+              @click.stop.prevent="showPassword = !showPassword"
             />
           </template>
         </UInput>
@@ -148,12 +150,14 @@ const showConfirmPassword = ref(false)
         >
           <template #trailing>
             <UButton
+              type="button"
               :icon="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
               color="neutral"
               variant="ghost"
               size="sm"
+              class="pointer-events-auto cursor-pointer"
               :aria-label="showConfirmPassword ? 'Sembunyikan password' : 'Tampilkan password'"
-              @click="showConfirmPassword = !showConfirmPassword"
+              @click.stop.prevent="showConfirmPassword = !showConfirmPassword"
             />
           </template>
         </UInput>

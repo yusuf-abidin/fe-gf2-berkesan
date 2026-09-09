@@ -21,6 +21,8 @@ export default defineNuxtConfig({
     '/': { prerender: true }
   },
 
+  compatibilityDate: '2025-01-15',
+
   vite: {
     server: {
       allowedHosts: [
@@ -28,8 +30,6 @@ export default defineNuxtConfig({
       ]
     }
   },
-
-  compatibilityDate: '2025-01-15',
 
   eslint: {
     config: {

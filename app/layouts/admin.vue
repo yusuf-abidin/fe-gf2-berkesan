@@ -75,7 +75,7 @@ const handleLogout = async () => {
     <aside
       :class="[
         'fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex flex-col shrink-0 transition-transform duration-300 md:static md:translate-x-0',
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        isSidebarOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none md:pointer-events-auto'
       ]"
     >
       <!-- Sidebar Header -->
@@ -87,6 +87,7 @@ const handleLogout = async () => {
           <AppLogo class="h-8 w-auto text-gray-900 dark:text-white" />
         </NuxtLink>
         <UButton
+          type="button"
           icon="i-lucide-x"
           color="neutral"
           variant="ghost"
@@ -146,6 +147,7 @@ const handleLogout = async () => {
         <div class="flex items-center gap-2">
           <!-- Mobile Sidebar Toggle -->
           <UButton
+            type="button"
             icon="i-lucide-menu"
             color="neutral"
             variant="ghost"

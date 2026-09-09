@@ -16,3 +16,25 @@
   --color-green-900: #0A5331;
   --color-green-950: #052E16;
 }
+
+@layer base {
+  /* Fix mobile touch/tap responsiveness across iOS Safari & Android Chrome */
+  button,
+  [role="button"],
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent inner SVG icons from hijacking pointer events on touch devices */
+  button svg,
+  button [class*="i-"],
+  [role="button"] svg,
+  [role="button"] [class*="i-"] {
+    pointer-events: none;
+  }
+}
