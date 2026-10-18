@@ -2,8 +2,17 @@ export interface ContributionType {
   id: number
   name: string
   description: string | null
+  is_public?: boolean
   created_at?: string
   updated_at?: string
+}
+
+export interface UnpaidResident {
+  id: number
+  resident_id: number
+  name: string
+  block: string | null
+  house_number: string | null
 }
 
 export interface ContributionPeriod {

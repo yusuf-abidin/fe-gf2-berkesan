@@ -23,6 +23,11 @@ const links = [
     label: 'Laporan Keuangan',
     icon: 'i-lucide-book-open',
     to: '/user/accounts'
+  },
+  {
+    label: 'Iuran Warga',
+    icon: 'i-lucide-receipt',
+    to: '/user/contributions'
   }
 ]
 

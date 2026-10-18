@@ -10,7 +10,8 @@ export const contributionTypeSchema = z.object({
     .string()
     .trim()
     .max(1000, 'Deskripsi terlalu panjang')
-    .optional()
+    .optional(),
+  is_public: z.boolean().optional()
 })
 
 export type ContributionTypeForm = z.infer<typeof contributionTypeSchema>

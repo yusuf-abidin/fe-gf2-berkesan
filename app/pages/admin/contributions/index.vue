@@ -26,7 +26,8 @@ const isEdit = computed(() => !!selectedType.value)
 
 const { form, loading, fieldErrors, handleSubmit } = useForm<ContributionTypeForm>({
   name: '',
-  description: ''
+  description: '',
+  is_public: false
 })
 
 watch(isModalOpen, (isOpen) => {
@@ -34,9 +35,11 @@ watch(isModalOpen, (isOpen) => {
     if (selectedType.value) {
       form.name = selectedType.value.name
       form.description = selectedType.value.description || ''
+      form.is_public = Boolean(selectedType.value.is_public)
     } else {
       form.name = ''
       form.description = ''
+      form.is_public = false
     }
   }
 })
@@ -168,9 +171,18 @@ const handleDelete = async () => {
         class="flex flex-col justify-between hover:shadow-md transition-shadow border border-gray-200 dark:border-neutral-800"
       >
         <div class="space-y-2 flex-1">
-          <h3 class="font-bold text-gray-900 dark:text-white text-base">
-            {{ item.name }}
-          </h3>
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-bold text-gray-900 dark:text-white text-base">
+              {{ item.name }}
+            </h3>
+            <UBadge
+              :color="item.is_public ? 'success' : 'neutral'"
+              variant="subtle"
+              size="sm"
+            >
+              {{ item.is_public ? 'Publik' : 'Internal' }}
+            </UBadge>
+          </div>
           <p class="text-gray-500 dark:text-neutral-450 line-clamp-3 text-sm">
             {{ item.description || 'Tidak ada deskripsi.' }}
           </p>
@@ -245,6 +257,17 @@ const handleDelete = async () => {
               placeholder="Jelaskan peruntukan atau ketentuan iuran ini..."
               class="w-full"
               :rows="3"
+              :disabled="loading"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Tampilkan ke Warga (Transparansi)"
+            description="Jika diaktifkan, data warga yang belum membayar iuran ini akan dapat dilihat di portal warga."
+            name="is_public"
+          >
+            <USwitch
+              v-model="form.is_public"
               :disabled="loading"
             />
           </UFormField>
